@@ -1,25 +1,56 @@
+<!-- application\Views\comments\index.php -->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comments</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <title>Комментарии</title>
+    <style>
+        /* Добавьте стили для адаптивной верстки по необходимости */
+    </style>
 </head>
+
 <body>
+    <h1>Комментарии</h1>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2 mt-5">
-            <?= view('comments/partials/comment_form') ?>
-            <?= view('comments/partials/comment_list', ['comments' => $comments]) ?>
-            <?= $pager->links('default', 'bootstrap') ?>
+    <!-- Форма добавления комментариев -->
+    <form action="/addComment" method="post">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <br>
+        <label for="comment">Комментарий:</label>
+        <textarea name="comment" required></textarea>
+        <br>
+        <button type="submit">Добавить комментарий</button>
+    </form>
+
+    <!-- Список комментариев -->
+    <?php foreach ($comments as $comment): ?>
+        <div>
+            <p>Email:
+                <?= $comment['email']; ?>
+            </p>
+            <p>
+                <?= $comment['comment']; ?>
+            </p>
+            <p>Дата:
+                <?= $comment['created_at']; ?>
+            </p>
+            <a href="/deleteComment/<?= $comment['id']; ?>">Удалить</a>
         </div>
-    </div>
-</div>
+    <?php endforeach; ?>
 
-<script src="/js/jquery.min.js"></script>
-<script src="/js/script.js"></script>
+    <!-- Пагинация -->
+    <div class="pager">
+
+        <?= $pager->links() ?>
+   
+</div>
+    <!-- Добавьте скрипты jQuery и обработчики событий по необходимости -->
 </body>
+
 </html>

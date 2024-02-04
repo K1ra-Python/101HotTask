@@ -7,72 +7,70 @@ use CodeIgniter\Controller;
 
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+        // Загрузка хелпера форм в конструкторе
+        helper('form');
+    }
+
     public function index()
     {
-        // Реализация вывода списка комментариев и формы
         $model = new CommentModel();
-        $data = [
-            'comments' => $model->paginate(3),
-            'pager' => $model->pager,
-        ];
 
-        return view('comment/index',$data);
+        $perPage = (int) ($this->request->getVar('perPage') ?? 3);
+        $page = (int) ($this->request->getVar('page') ?? 3);
+        $data['comments'] = $model->getAllComments($perPage, $page);
+        $data['pager'] = $model->pager;
+
+        return view('comments/index', $data);
     }
+
+
+
+
 
     public function addComment()
     {
-        // Реализация добавления комментария
         $model = new CommentModel();
 
-        if($this->request->getMethod() === 'post' && $this->validate([
+        // Валидация данных
+        $validationRules = [
             'email' => 'required|valid_email',
             'comment' => 'required',
-        ])){
-            $model ->save([
-                'email' => $this-> request->getPost('email'),
-                'comment' => $this-> request->getPost('comment'),
-            ]);
+        ];
+
+        if (!$this->validate($validationRules)) {
+            $errors = $this->validator->getErrors();
+            // Отладочные сообщения
+            echo "Validation Errors: ";
+            print_r($errors);
+            echo "<br>";
+
+            return redirect()->to('/')->withInput()->with('errors', $errors);
         }
-        return redirect()->to('/')->with('Отлично','Коментарий добавлен успешно.');
+
+        // Добавление комментария в базу данных
+        $model->insert([
+            'email' => $this->request->getPost('email'),
+            'comment' => $this->request->getPost('comment'),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()->to(base_url('/'));
     }
 
     public function deleteComment($id)
     {
         // Реализация удаления комментария
         $model = new CommentModel();
-        $model -> delete($id);
-        return redirect()->to('/')->with('Успех','Коментарий успешно удалён.');
+        $model ->where('id',$id);
+        $model->delete();
 
+        // Отладочные сообщения
+        echo "Comment Deleted: ";
+        print_r($id);
+        echo "<br>";
+
+        return redirect()->to(base_url('/'))->with('Успех', 'Комментарий успешно удалён.');
     }
 }
-
-
-/*
-
-    public function addComment()
-    {
-        $model = new CommentModel();
-
-        if ($this->request->getMethod() === 'post' && $this->validate([
-            'email' => 'required|valid_email',
-            'comment' => 'required',
-        ])) {
-            $model->save([
-                'email' => $this->request->getPost('email'),
-                'comment' => $this->request->getPost('comment'),
-            ]);
-        }
-
-        return redirect()->to('/')->with('success', 'Comment added successfully.');
-    }
-
-    public function deleteComment($id)
-    {
-        $model = new CommentModel();
-        $model->delete($id);
-
-        return redirect()->to('/')->with('success', 'Comment deleted successfully.');
-    }
-}
-
-*/

@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'CommentController::index');
-$routes->get('/comment/addComment', 'CommentController::addComment');
-$routes->get('/comment/deleteComment/(:num)', 'CommentController::deleteComment/$i');
+$routes->post('/addComment', 'CommentController::addComment');
+$routes->get('/deleteComment/(:num)', 'CommentController::deleteComment/$1');
+
 
