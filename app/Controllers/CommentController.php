@@ -22,11 +22,27 @@ class CommentController extends Controller
     public function addComment()
     {
         // Реализация добавления комментария
+        $model = new CommentModel();
+
+        if($this->request->getMethod() === 'post' && $this->validate([
+            'email' => 'required|valid_email',
+            'comment' => 'required',
+        ])){
+            $model ->save([
+                'email' => $this-> request->getPost('email'),
+                'comment' => $this-> request->getPost('comment'),
+            ]);
+        }
+        return redirect()->to('/')->with('Отлично','Коментарий добавлен успешно.');
     }
 
     public function deleteComment($id)
     {
         // Реализация удаления комментария
+        $model = new CommentModel();
+        $model -> delete($id);
+        return redirect()->to('/')->with('Успех','Коментарий успешно удалён.');
+
     }
 }
 
