@@ -40,7 +40,9 @@ class CommentModel extends Model
     protected $beforeDelete = [];
     protected $afterDelete = [];
     public function getAllComments($perPage)
+    
     {   
+     
         $perPage = 3;
         $result = $this->orderBy('created_at', 'desc')->paginate($perPage);
         return $result;

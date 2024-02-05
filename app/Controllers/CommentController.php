@@ -7,19 +7,21 @@ use CodeIgniter\Controller;
 
 class CommentController extends Controller
 {
+
     public function __construct()
     {
+
         // Загрузка хелпера форм в конструкторе
         helper('form');
     }
 
     public function index()
     {
-        $model = new CommentModel();
 
+        $model = new CommentModel();
         $perPage = (int) ($this->request->getVar('perPage') ?? 3);
-        $page = (int) ($this->request->getVar('page') ?? 3);
-        $data['comments'] = $model->getAllComments($perPage, $page);
+        //$page = (int) ($this->request->getVar('page') ?? 4);
+        $data['comments'] = $model->getAllComments($perPage);
         $data['pager'] = $model->pager;
 
         return view('comments/index', $data);
@@ -63,7 +65,7 @@ class CommentController extends Controller
     {
         // Реализация удаления комментария
         $model = new CommentModel();
-        $model ->where('id',$id);
+        $model->where('id', $id);
         $model->delete();
 
         // Отладочные сообщения
