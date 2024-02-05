@@ -17,7 +17,6 @@
 
     <title>Комментарии</title>
     <style>
-        /* Добавьте стили для адаптивной верстки по необходимости */
     </style>
 </head>
 
@@ -25,34 +24,47 @@
     <h1>Комментарии</h1>
 
     <!-- Форма добавления комментариев -->
-    <form action="/addComment" method="post">
+    <form action="/addComment" method="post" class="d-flex flex-column align-items-center rounded-3">
         <label for="email">Email:</label>
-        <input type="email" name="email" required>
+        <input class="rounded-3" type="email" name="email" required>
         <br>
         <label for="comment">Комментарий:</label>
-        <textarea name="comment" required></textarea>
+        <textarea name="comment" required class="rounded-3"></textarea>
         <br>
-        <button type="submit">Добавить комментарий</button>
+        <button class="btn btn-primary mt-5" type="submit">Добавить комментарий</button>
     </form>
+    
+    <div class="d-flex flex-column mb-3 align-items-center mt-5">
+    <a href="<?= base_url('/sort_by_date_up') ?>" class="btn btn-primary mb-2">Сортировать по Дате (по возрастанию)</a>
+    <a href="<?= base_url('/sort_by_date_down') ?>" class="btn btn-primary">Сортировать по Дате (по убыванию)</a>
+</div>
 
-    <!-- Список комментариев -->
-    <?php foreach ($comments as $comment): ?>
-        <div>
-            <p>Email:
-                <?= $comment['email']; ?>
-            </p>
-            <p>
-                <?= $comment['comment']; ?>
-            </p>
-            <p>Дата:
-                <?= $comment['created_at']; ?>
-            </p>
-            <a href="/deleteComment/<?= $comment['id']; ?>">Удалить</a>
-        </div>
-    <?php endforeach; ?>
+    <div class="d-flex flex-row mb-3 justify-content-around mt-5 border border-3">
+        <!-- Список комментариев -->
+        <?php foreach ($comments as $comment): ?>
+
+            <div class="d-flex flex-row mb-3 border border-primary p-5">
+                <div>
+                    <p>Имейл:
+                        <?= $comment['email']; ?>
+                    </p>
+
+                    <p>Текст:
+                        <?= $comment['comment']; ?>
+                    </p>
+
+                    <p>Дата:
+                        <?= $comment['created_at']; ?>
+                    </p>
+
+                    <a href="/deleteComment/<?= $comment['id']; ?>">Удалить</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
     <!-- Пагинация -->
-    <div class="pager">
+    <div class="pager d-flex justify-content-center p-5">
 
         <?= $pager->links() ?>
 

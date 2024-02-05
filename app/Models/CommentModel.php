@@ -39,15 +39,13 @@ class CommentModel extends Model
     protected $afterFind = [];
     protected $beforeDelete = [];
     protected $afterDelete = [];
-    public function getAllComments($perPage)
-    
-    {   
-     
+    public function getAllComments($perPage, $orderBy = 'id', $orderDir = 'asc')
+    {
         $perPage = 3;
-        $result = $this->orderBy('created_at', 'desc')->paginate($perPage);
+        $result = $this->orderBy($orderBy, $orderDir)->paginate($perPage);
         return $result;
     }
-    
+
 
 
 
